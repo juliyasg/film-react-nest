@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
@@ -37,19 +37,19 @@ export class RepositoryService {
       });
 
       if (!film) {
-        throw new BadRequestException('Film not found');
+        throw new Error('Film not found');
       }
 
       const session = film.schedule.find((item) => item.id === ticket.session);
 
       if (!session) {
-        throw new BadRequestException('Session not found');
+        throw new Error('Session not found');
       }
 
       const place = `${ticket.row}:${ticket.seat}`;
 
       if (session.taken.includes(place)) {
-        throw new BadRequestException(`Seat ${place} already taken`);
+        throw new Error(`Seat ${place} already taken`);
       }
 
       session.taken.push(place);

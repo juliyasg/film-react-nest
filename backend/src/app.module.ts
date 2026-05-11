@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ServeStaticModule } from '@nestjs/serve-static';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import * as path from 'node:path';
 
@@ -22,7 +22,12 @@ import { RepositoryService } from './repository/repository.service';
       cache: true,
     }),
 
-    MongooseModule.forRoot(process.env.DATABASE_URL),
+    MongooseModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        uri: configService.get<string>('DATABASE_URL'),
+      }),
+    }),
 
     MongooseModule.forFeature([
       {
