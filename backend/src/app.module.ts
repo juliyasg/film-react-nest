@@ -30,7 +30,7 @@ import { RepositoryService } from './repository/repository.service';
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
 
-        url: `postgres://${configService.get<string>('DATABASE_USERNAME')}:${configService.get<string>('DATABASE_PASSWORD')}@localhost:5432/nest_project`,
+        url: configService.get<string>('DATABASE_URL'),
 
         entities: [Film, Schedule],
 
