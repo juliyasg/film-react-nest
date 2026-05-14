@@ -28,9 +28,17 @@ import { RepositoryService } from './repository/repository.service';
       inject: [ConfigService],
 
       useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
+        type: configService.get<'postgres'>('DATABASE_DRIVER'),
 
-        url: configService.get<string>('DATABASE_URL'),
+        host: configService.get<string>('DATABASE_HOST'),
+
+        port: Number(configService.get<string>('DATABASE_PORT')),
+
+        database: configService.get<string>('DATABASE_NAME'),
+
+        username: configService.get<string>('DATABASE_USERNAME'),
+
+        password: configService.get<string>('DATABASE_PASSWORD'),
 
         entities: [Film, Schedule],
 

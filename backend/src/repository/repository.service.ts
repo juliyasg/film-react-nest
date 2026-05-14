@@ -32,7 +32,7 @@ export class RepositoryService implements FilmsRepository {
       items: items.map((film) => ({
         ...film,
 
-        tags: film.tags.split(','),
+        tags: film.tags,
       })),
     };
   }
@@ -60,7 +60,7 @@ export class RepositoryService implements FilmsRepository {
           .map((schedule) => ({
             ...schedule,
 
-            taken: schedule.taken ? schedule.taken.split(',') : [],
+            taken: schedule.taken || [],
           })) || [],
     };
   }
@@ -77,7 +77,7 @@ export class RepositoryService implements FilmsRepository {
         throw new Error('Session not found');
       }
 
-      const taken = session.taken ? session.taken.split(',') : [];
+      const taken = session.taken || [];
 
       const place = `${ticket.row}:${ticket.seat}`;
 
@@ -87,7 +87,7 @@ export class RepositoryService implements FilmsRepository {
 
       taken.push(place);
 
-      session.taken = taken.join(',');
+      session.taken = taken;
 
       await this.scheduleRepository.save(session);
     }
