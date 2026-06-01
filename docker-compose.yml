@@ -3,6 +3,7 @@ services:
     image: ghcr.io/juliyasg/film-frontend:latest
     build:
       context: ./frontend
+    restart: unless-stopped
     volumes:
       - frontend_dist:/dist
     command: sh -c "cp -r /app/dist/* /dist && tail -f /dev/null"
@@ -11,16 +12,9 @@ services:
     image: ghcr.io/juliyasg/film-backend:latest
     build:
       context: ./backend
+    restart: unless-stopped
     env_file:
-      - ./backend/.env
-    environment:
-      DATABASE_HOST: postgres
-      DATABASE_PORT: 5432
-      DATABASE_NAME: nest_project
-      DATABASE_USERNAME: student
-      DATABASE_PASSWORD: student
-      DATABASE_DRIVER: postgres
-      LOGGER_FORMAT: dev
+      - .env
     depends_on:
       - postgres
     ports:
@@ -30,6 +24,7 @@ services:
     image: ghcr.io/juliyasg/film-nginx:latest
     build:
       context: ./nginx
+    restart: unless-stopped
     ports:
       - "80:80"
     volumes:
@@ -41,10 +36,9 @@ services:
   postgres:
     image: postgres:16-alpine
     container_name: film_postgres
-    environment:
-      POSTGRES_DB: nest_project
-      POSTGRES_USER: student
-      POSTGRES_PASSWORD: student
+    restart: unless-stopped
+    env_file:
+      - .env
     ports:
       - "5432:5432"
     volumes:
@@ -53,9 +47,9 @@ services:
   pgadmin:
     image: dpage/pgadmin4:8
     container_name: film_pgadmin
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@example.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+    restart: unless-stopped
+    env_file:
+      - .env
     ports:
       - "8080:80"
     depends_on:
