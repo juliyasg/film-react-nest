@@ -77,7 +77,13 @@ export class RepositoryService implements FilmsRepository {
         throw new Error('Session not found');
       }
 
-      const taken = session.taken || [];
+      const rawTaken = session.taken as string[] | string | null;
+
+      const taken = Array.isArray(rawTaken)
+        ? rawTaken
+        : typeof rawTaken === 'string' && rawTaken.length > 0
+          ? rawTaken.split(',')
+          : [];
 
       const place = `${ticket.row}:${ticket.seat}`;
 

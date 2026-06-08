@@ -1,3 +1,9 @@
+## Деплой
+
+Фронтенд: http://juliasg-film.nomorepartiessite.ru
+
+Апи: http://api-juliasg-film.nomorepartiessite.ru/api/afisha
+
 # FILM!
 
 ## Установка
